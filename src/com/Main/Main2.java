@@ -25,7 +25,8 @@ public class Main2 {
         EntityManagerFactory emf = new HibernatePersistenceProvider()
                 .createContainerEntityManagerFactory(new PersistenceUnitInfoImpl(), map);
         EntityManager em = emf.createEntityManager();
-        insert(em);
+        delete(em);
+        read(em);
 
         em.close();
         emf.close();
@@ -44,23 +45,21 @@ public class Main2 {
 
 
 public static void read(EntityManager em){
-        String sql ="select * from Student";
-        Query nativeQuery = em.createNativeQuery(sql);
-        List<Object[]> resultList = nativeQuery.getResultList();
-        for (Object[] objects : resultList) {
-                for (Object o: objects) {
-                        System.out.print(o + " ");
-                }
-         System.out.println();
+        String jql ="select e from Student e";
+        Query nativeQuery = em.createQuery(jql,Student.class);
+        List<Student> resultList = nativeQuery.getResultList();
+        for (Student student : resultList) {
+            System.out.println(student);
         }
-}
+        }
+
 public static void update(EntityManager em){
         EntityTransaction trs = em.getTransaction();
         trs.begin();
-        String sql="update Student set eaddress=? where eid>=?";
-        Query nativeQuery = em.createNativeQuery(sql);
-        nativeQuery.setParameter(1, "rahul yadava");
-        nativeQuery.setParameter(2, 24);
+        String sql="update Student set eaddress=:eaddress where eid>=:eid";
+        Query nativeQuery = em.createQuery(sql);
+        nativeQuery.setParameter("eaddress", "rahul yadava");
+        nativeQuery.setParameter("eid", 24);
         nativeQuery.executeUpdate();
         trs.commit();
         System.out.println("Data updated");
@@ -68,9 +67,9 @@ public static void update(EntityManager em){
  public static void delete(EntityManager em){
         EntityTransaction trs = em.getTransaction();
         trs.begin();
-        String sql="delete from Student swhere eid>=?";
-        Query nativeQuery = em.createNativeQuery(sql);
-        nativeQuery.setParameter(1, 26);
+        String jql="delete from Student where eid>=:eid";
+        Query nativeQuery = em.createQuery(jql);
+        nativeQuery.setParameter("eid" ,26);
         nativeQuery.executeUpdate();
         trs.commit();
         System.out.println("Data updated");
