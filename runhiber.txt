@@ -17,4 +17,4 @@ java -cp "bin:lib/*" com.Main.Main
   
   javac -cp "lib/*" -d bin $(find src -name "*.java")
 cp src/config.properties bin/
-java -cp "bin:lib/*" com.Main.Main
+java -cp "bin:lib/*" com.Main.Main3
